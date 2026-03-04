@@ -89,13 +89,15 @@ class _MainPageState extends State<MainPage> {
                     type: BottomNavigationBarType.fixed,
                     selectedItemColor: _selectedColor,
                     unselectedItemColor: Colors.grey,
-                    iconSize: 30, // Increased
+                    iconSize: 30,
                     selectedLabelStyle: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                     unselectedLabelStyle: const TextStyle(fontSize: 13),
-                    items: _navItems,
+                    items: _userRole == UserRole.MANAGER
+                        ? _getManagerNavItemsWithBadge(context)
+                        : _navItems,
                   ),
                 ),
               );
@@ -103,6 +105,77 @@ class _MainPageState extends State<MainPage> {
           );
         },
       ),
+    );
+  }
+
+  /// Build manager nav items with live pending-request badge on tab 1.
+  List<BottomNavigationBarItem> _getManagerNavItemsWithBadge(
+    BuildContext context,
+  ) {
+    final pendingCount = context.watch<HomeCubit>().state.pendingCount;
+    return [
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.home_outlined),
+        activeIcon: Icon(Icons.home),
+        label: AppStrings.home,
+      ),
+      BottomNavigationBarItem(
+        icon: _withBadge(
+          Icons.admin_panel_settings_outlined,
+          pendingCount,
+          active: false,
+        ),
+        activeIcon: _withBadge(
+          Icons.admin_panel_settings,
+          pendingCount,
+          active: true,
+        ),
+        label: AppStrings.manage,
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.calendar_month_outlined),
+        activeIcon: Icon(Icons.calendar_month),
+        label: AppStrings.schedule,
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.person_outline),
+        activeIcon: Icon(Icons.person),
+        label: AppStrings.profile,
+      ),
+    ];
+  }
+
+  /// Overlay a red badge on top-right of an icon.
+  Widget _withBadge(IconData iconData, int count, {required bool active}) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Icon(iconData),
+        if (count > 0)
+          Positioned(
+            right: -8,
+            top: -6,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white, width: 1.2),
+              ),
+              constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+              child: Text(
+                count > 99 ? '99+' : '$count',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  height: 1.1,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+      ],
     );
   }
 

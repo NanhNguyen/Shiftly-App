@@ -23,55 +23,26 @@ class HomePage extends StatelessWidget {
             title: const Text(AppStrings.scheduleOverview),
             actions: [
               Stack(
+                clipBehavior: Clip.none,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.notifications_none, size: 32),
                     onPressed: () =>
                         context.pushRoute(const NotificationRoute()),
                   ),
-                  Builder(
-                    builder: (context) {
-                      final role =
-                          getIt<AuthService>().currentUser?.role ??
-                          UserRole.INTERN;
-                      final isManagerOrHR =
-                          role == UserRole.MANAGER || role == UserRole.HR;
-                      final totalBadge =
-                          state.unreadNotificationCount +
-                          (isManagerOrHR ? state.pendingCount : 0);
-
-                      if (totalBadge > 0) {
-                        return Positioned(
-                          right: 8,
-                          top: 8,
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            constraints: const BoxConstraints(
-                              minWidth: 16,
-                              minHeight: 16,
-                            ),
-                            child: Text(
-                              '$totalBadge',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                  // Badge: only unread notifications (like Facebook bell)
+                  if (state.unreadNotificationCount > 0)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: _buildBadge(
+                        state.unreadNotificationCount,
+                        color: Colors.red,
+                      ),
+                    ),
                 ],
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
             ],
           ),
           body: RefreshIndicator(
@@ -166,6 +137,31 @@ class HomePage extends StatelessWidget {
           }(),
         );
       },
+    );
+  }
+
+  /// Shared badge widget used for notification bell and tab badges.
+  /// Shows "99+" when count exceeds 99, like Facebook/iOS convention.
+  Widget _buildBadge(int count, {Color color = Colors.red}) {
+    final label = count > 99 ? '99+' : '$count';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white, width: 1.5),
+      ),
+      constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          height: 1.1,
+        ),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
