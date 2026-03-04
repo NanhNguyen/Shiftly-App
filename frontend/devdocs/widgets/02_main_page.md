@@ -51,7 +51,7 @@ _notifCubit = getIt<NotificationCubit>()..loadNotifications();
 
 - **INTERN / EMPLOYEE**: `[HomePage, SchedulePage, StatusPage, ProfilePage]`
 - **MANAGER**: `[HomePage, ManagerRequestPage, SchedulePage, ProfilePage]`
-- **HR**: `[HomePage, ManagerRequestPage, SchedulePage, ProfilePage]`
+- **HR**: `[HomePage, SchedulePage, ProfilePage]`
 
 ### `BottomNavigationBar`
 - `currentIndex: state.currentIndex` – tab đang active
@@ -90,9 +90,8 @@ _notifCubit = getIt<NotificationCubit>()..loadNotifications();
 
 **HR:**
 - Tab 0: `home_outlined` / `home` → "Trang chủ"
-- Tab 1: `visibility_outlined` / `visibility` → "Xem tất cả"
-- Tab 2: `calendar_month_outlined` / `calendar_month` → "Lịch nhân viên"
-- Tab 3: `person_outline` / `person` → "Hồ sơ"
+- Tab 1: `calendar_month_outlined` / `calendar_month` → "Lịch nhân viên"
+- Tab 2: `person_outline` / `person` → "Hồ sơ"
 
 ### `InAppNotificationOverlay` (custom widget)
 - File: `main/widget/in_app_notification_banner.dart`

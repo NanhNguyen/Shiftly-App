@@ -76,7 +76,7 @@ class _MainPageState extends State<MainPage> {
                       // Auto-refresh schedule when switching to Schedule tab
                       if ((userRole == UserRole.INTERN && index == 1) ||
                           (userRole == UserRole.MANAGER && index == 2) ||
-                          (userRole == UserRole.HR && index == 2)) {
+                          (userRole == UserRole.HR && index == 1)) {
                         getIt<ScheduleCubit>().loadSchedules(userRole);
                       }
                     },
@@ -110,12 +110,7 @@ class _MainPageState extends State<MainPage> {
           ProfilePage(),
         ];
       case UserRole.HR:
-        return const [
-          HomePage(),
-          ManagerRequestPage(), // HR can view all but not approve
-          SchedulePage(),
-          ProfilePage(),
-        ];
+        return const [HomePage(), SchedulePage(), ProfilePage()];
       case UserRole.INTERN:
       case UserRole.EMPLOYEE:
         return const [HomePage(), SchedulePage(), StatusPage(), ProfilePage()];
@@ -153,11 +148,6 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
             label: AppStrings.home,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.visibility_outlined),
-            activeIcon: Icon(Icons.visibility),
-            label: AppStrings.viewAll,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month_outlined),
