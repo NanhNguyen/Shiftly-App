@@ -82,7 +82,10 @@ class ManagerRequestPage extends StatelessWidget {
                           label: 'Xem lịch',
                           textColor: Colors.white,
                           onPressed: () {
-                            context.read<MainCubit>().setIndex(2);
+                            final targetIndex = userRole == UserRole.MANAGER
+                                ? 2
+                                : 1;
+                            context.read<MainCubit>().setIndex(targetIndex);
                           },
                         )
                       : null,
@@ -92,12 +95,18 @@ class ManagerRequestPage extends StatelessWidget {
               if (isApproved) {
                 Future.delayed(const Duration(milliseconds: 500), () {
                   if (context.mounted) {
-                    context.read<MainCubit>().setIndex(2);
+                    final targetIndex = userRole == UserRole.MANAGER ? 2 : 1;
+                    context.read<MainCubit>().setIndex(targetIndex);
                   }
                 });
               }
             },
             builder: (context, state) {
+              if (state.status == BaseStatus.loading &&
+                  state.requests.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
               if (isManager) {
                 return _buildManagerView(context, state);
               } else {

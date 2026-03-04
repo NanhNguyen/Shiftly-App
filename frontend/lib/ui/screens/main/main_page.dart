@@ -31,19 +31,28 @@ class _MainPageState extends State<MainPage> {
   late final MainCubit _mainCubit;
   late final NotificationCubit _notifCubit;
 
+  late final UserRole _userRole;
+  late final List<Widget> _pages;
+  late final List<BottomNavigationBarItem> _navItems;
+  late final Color _selectedColor;
+
   @override
   void initState() {
     super.initState();
+    final authService = getIt<AuthService>();
+    _userRole = authService.currentUser?.role ?? UserRole.INTERN;
+
     _mainCubit = getIt<MainCubit>()..setIndex(0); // always start at Home tab
     _homeCubit = getIt<HomeCubit>()..loadData();
     _notifCubit = getIt<NotificationCubit>()..loadNotifications();
+
+    _pages = _getPagesForRole(_userRole);
+    _navItems = _getNavItemsForRole(_userRole);
+    _selectedColor = _getColorForRole(_userRole);
   }
 
   @override
   Widget build(BuildContext context) {
-    final authService = getIt<AuthService>();
-    final userRole = authService.currentUser?.role ?? UserRole.INTERN;
-
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _mainCubit),
@@ -54,9 +63,6 @@ class _MainPageState extends State<MainPage> {
         builder: (context, notifState) {
           return BlocBuilder<MainCubit, MainState>(
             builder: (context, state) {
-              final pages = _getPagesForRole(userRole);
-              final navItems = _getNavItemsForRole(userRole);
-
               final unreadNotifications = notifState.notifications
                   .where((n) => !n.isRead)
                   .toList();
@@ -67,21 +73,21 @@ class _MainPageState extends State<MainPage> {
                 child: Scaffold(
                   body: IndexedStack(
                     index: state.currentIndex,
-                    children: pages,
+                    children: _pages,
                   ),
                   bottomNavigationBar: BottomNavigationBar(
                     currentIndex: state.currentIndex,
                     onTap: (index) {
-                      context.read<MainCubit>().setIndex(index);
+                      _mainCubit.setIndex(index);
                       // Auto-refresh schedule when switching to Schedule tab
-                      if ((userRole == UserRole.INTERN && index == 1) ||
-                          (userRole == UserRole.MANAGER && index == 2) ||
-                          (userRole == UserRole.HR && index == 1)) {
-                        getIt<ScheduleCubit>().loadSchedules(userRole);
+                      if ((_userRole == UserRole.INTERN && index == 1) ||
+                          (_userRole == UserRole.MANAGER && index == 2) ||
+                          (_userRole == UserRole.HR && index == 1)) {
+                        getIt<ScheduleCubit>().loadSchedules(_userRole);
                       }
                     },
                     type: BottomNavigationBarType.fixed,
-                    selectedItemColor: _getColorForRole(userRole),
+                    selectedItemColor: _selectedColor,
                     unselectedItemColor: Colors.grey,
                     iconSize: 30, // Increased
                     selectedLabelStyle: const TextStyle(
@@ -89,7 +95,7 @@ class _MainPageState extends State<MainPage> {
                       fontWeight: FontWeight.bold,
                     ),
                     unselectedLabelStyle: const TextStyle(fontSize: 13),
-                    items: navItems,
+                    items: _navItems,
                   ),
                 ),
               );
