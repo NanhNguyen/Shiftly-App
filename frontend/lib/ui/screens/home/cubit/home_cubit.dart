@@ -11,16 +11,18 @@ import 'home_state.dart';
 class HomeCubit extends BaseCubit<HomeState> {
   final ScheduleRequestRepo _scheduleRepo;
   final NotificationRepo _notificationRepo;
+  final AuthService _authService;
 
-  HomeCubit(AuthService authService, this._scheduleRepo, this._notificationRepo)
-    : super(HomeState(user: authService.currentUser));
+  HomeCubit(this._authService, this._scheduleRepo, this._notificationRepo)
+    : super(HomeState(user: _authService.currentUser));
 
   Future<void> loadData() async {
     setLoading();
     try {
-      final user = state.user;
+      final currentUser = _authService.currentUser;
       final isManagerOrHR =
-          user?.role == UserRole.MANAGER || user?.role == UserRole.HR;
+          currentUser?.role == UserRole.MANAGER ||
+          currentUser?.role == UserRole.HR;
 
       final results = await Future.wait([
         _scheduleRepo.getMySchedules(),
@@ -64,6 +66,7 @@ class HomeCubit extends BaseCubit<HomeState> {
       emit(
         state.copyWith(
           status: BaseStatus.success,
+          user: currentUser,
           pendingCount: pending,
           totalCount: mySchedules.length,
           unreadNotificationCount: unreadCount,
