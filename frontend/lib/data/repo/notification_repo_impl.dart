@@ -20,4 +20,9 @@ class NotificationRepoImpl implements NotificationRepo {
   Future<void> markAsRead(String id) async {
     await _notificationApi.markAsRead(id);
   }
+
+  @override
+  Future<void> markAllAsRead() async {
+    await _notificationApi.markAllAsRead();
+  }
 }

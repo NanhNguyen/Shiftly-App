@@ -59,9 +59,9 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    gh.factory<_i771.MainCubit>(() => _i771.MainCubit());
-    gh.lazySingleton<_i220.TokenStorage>(() => _i220.TokenStorage());
+    gh.lazySingleton<_i771.MainCubit>(() => _i771.MainCubit());
     gh.lazySingleton<_i951.AppRouter>(() => _i951.AppRouter());
+    gh.lazySingleton<_i220.TokenStorage>(() => _i220.TokenStorage());
     gh.lazySingleton<_i514.ApiClient>(
       () => _i514.ApiClient(gh<_i220.TokenStorage>()),
     );
@@ -75,7 +75,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i479.NotificationRepo>(
       () => _i262.NotificationRepoImpl(gh<_i450.NotificationApi>()),
     );
-    gh.factory<_i343.NotificationCubit>(
+    gh.lazySingleton<_i343.NotificationCubit>(
       () => _i343.NotificationCubit(gh<_i479.NotificationRepo>()),
     );
     gh.lazySingleton<_i1072.AuthRepo>(
@@ -87,11 +87,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i674.ScheduleCubit>(
       () => _i674.ScheduleCubit(gh<_i611.ScheduleRequestRepo>()),
     );
-    gh.factory<_i262.StatusCubit>(
-      () => _i262.StatusCubit(gh<_i611.ScheduleRequestRepo>()),
-    );
     gh.factory<_i500.ScheduleFormCubit>(
       () => _i500.ScheduleFormCubit(gh<_i611.ScheduleRequestRepo>()),
+    );
+    gh.factory<_i262.StatusCubit>(
+      () => _i262.StatusCubit(gh<_i611.ScheduleRequestRepo>()),
     );
     gh.factory<_i359.ManagerRequestsCubit>(
       () => _i359.ManagerRequestsCubit(gh<_i611.ScheduleRequestRepo>()),
@@ -102,7 +102,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i458.LoginCubit>(
       () => _i458.LoginCubit(gh<_i258.AuthService>()),
     );
-    gh.factory<_i360.HomeCubit>(
+    gh.lazySingleton<_i360.HomeCubit>(
       () => _i360.HomeCubit(
         gh<_i258.AuthService>(),
         gh<_i611.ScheduleRequestRepo>(),

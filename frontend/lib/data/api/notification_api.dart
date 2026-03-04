@@ -15,4 +15,8 @@ class NotificationApi {
   Future<Response> markAsRead(String id) {
     return _apiClient.patch('/notifications/$id/read');
   }
+
+  Future<Response> markAllAsRead() {
+    return _apiClient.patch('/notifications/read-all');
+  }
 }

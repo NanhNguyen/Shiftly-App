@@ -10,6 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i6;
+import 'package:flutter/cupertino.dart' as _i7;
 import 'package:schedule_management_frontend/ui/screens/login/login_page.dart'
     as _i1;
 import 'package:schedule_management_frontend/ui/screens/main/main_page.dart'
@@ -87,16 +88,45 @@ class NotificationRoute extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.ScheduleFormPage]
-class ScheduleFormRoute extends _i6.PageRouteInfo<void> {
-  const ScheduleFormRoute({List<_i6.PageRouteInfo>? children})
-    : super(ScheduleFormRoute.name, initialChildren: children);
+class ScheduleFormRoute extends _i6.PageRouteInfo<ScheduleFormRouteArgs> {
+  ScheduleFormRoute({
+    _i7.Key? key,
+    bool isInitialRecurring = false,
+    List<_i6.PageRouteInfo>? children,
+  }) : super(
+         ScheduleFormRoute.name,
+         args: ScheduleFormRouteArgs(
+           key: key,
+           isInitialRecurring: isInitialRecurring,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ScheduleFormRoute';
 
   static _i6.PageInfo page = _i6.PageInfo(
     name,
     builder: (data) {
-      return const _i5.ScheduleFormPage();
+      final args = data.argsAs<ScheduleFormRouteArgs>(
+        orElse: () => const ScheduleFormRouteArgs(),
+      );
+      return _i5.ScheduleFormPage(
+        key: args.key,
+        isInitialRecurring: args.isInitialRecurring,
+      );
     },
   );
+}
+
+class ScheduleFormRouteArgs {
+  const ScheduleFormRouteArgs({this.key, this.isInitialRecurring = false});
+
+  final _i7.Key? key;
+
+  final bool isInitialRecurring;
+
+  @override
+  String toString() {
+    return 'ScheduleFormRouteArgs{key: $key, isInitialRecurring: $isInitialRecurring}';
+  }
 }

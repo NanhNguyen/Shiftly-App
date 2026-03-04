@@ -4,8 +4,6 @@ import '../constant/enums.dart';
 part 'schedule_request_model.freezed.dart';
 part 'schedule_request_model.g.dart';
 
-enum RequestStatus { PENDING, APPROVED, REJECTED }
-
 enum RecurrenceFrequency { NONE, DAILY, WEEKLY, MONTHLY }
 
 @freezed

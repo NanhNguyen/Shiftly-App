@@ -73,7 +73,9 @@ class AppStrings {
   static const String requestSubmitted = 'Yêu cầu được gửi thành công!';
   static const String submissionFailed = 'Gửi yêu cầu thất bại';
   static const String requestLeave = 'Đăng ký nghỉ phép';
-  static const String registerScheduleTitle = 'Đăng ký lịch trình';
+  static const String registerScheduleTitle = 'Đăng ký lịch nghỉ';
+  static const String recurringLeave = 'Nghỉ định kỳ';
+  static const String adhocLeave = 'Nghỉ phép phát sinh';
   static const String requestMode = 'Chế độ yêu cầu';
   static const String work = 'Làm việc';
   static const String leave = 'Nghỉ phép';
@@ -85,7 +87,7 @@ class AppStrings {
   static const String start = 'BẮT ĐẦU';
   static const String until = 'ĐẾN KHI';
   static const String repeatOn = 'Lặp lại vào';
-  static const String workingShift = 'Ca làm việc';
+  static const String workingShift = 'Ca nghỉ';
   static const String morning = 'SÁNG';
   static const String afternoon = 'CHIỀU';
   static const String allDay = 'CẢ NGÀY';
@@ -99,7 +101,7 @@ class AppStrings {
 
   // Manager
   static const String manageRequests = 'Quản lý yêu cầu';
-  static const String allRequestsView = 'Tất cả yêu cầu (Chỉ xem)';
+  static const String allRequestsView = 'Tất cả yêu cầu';
   static const String noPendingRequests = 'Không có yêu cầu nào đang chờ.';
   static const String noRequestsCategory =
       'Không có yêu cầu nào trong mục này.';
@@ -108,8 +110,8 @@ class AppStrings {
   static const String batchIndividualDays = 'Yêu cầu ngày cụ thể (Nhóm)';
   static const String duration = 'Thời hạn';
   static const String datesLabel = 'Ngày:';
-  static const String rejectAll = 'Từ chối tất cả';
-  static const String approveAll = 'Phê duyệt tất cả';
+  static const String rejectAll = 'Từ chối';
+  static const String approveAll = 'Phê duyệt';
   static const String reject = 'Từ chối';
   static const String approve = 'Phê duyệt';
   static const String weekday = 'Thứ';
@@ -124,7 +126,7 @@ class AppStrings {
   static const String hr = 'Nhân sự';
 
   // Home
-  static const String scheduleOverview = 'Tổng quan lịch trình';
+  static const String scheduleOverview = 'Tổng quan lịch nghỉ';
   static const String welcomeBack = 'Chào mừng quay trở lại,';
   static const String onLeaveToday = 'ĐANG NGHỈ HÔM NAY';
   static const String workingToday = 'ĐANG LÀM VIỆC HÔM NAY';

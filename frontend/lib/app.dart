@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:schedule_management_frontend/ui/di/di_config.dart';
 import 'package:schedule_management_frontend/ui/router/app_router.dart';
@@ -14,6 +15,13 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Shiftly',
+      locale: const Locale('vi'),
+      supportedLocales: const [Locale('vi')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -29,12 +37,34 @@ class App extends StatelessWidget {
           centerTitle: true,
           titleTextStyle: GoogleFonts.inter(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 24, // Increased from 22
             fontWeight: FontWeight.bold,
           ),
-          iconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+            size: 28,
+          ), // Increased icon size
         ),
-        textTheme: GoogleFonts.interTextTheme(),
+        iconTheme: IconThemeData(color: Colors.blue.shade700, size: 26),
+        textTheme: GoogleFonts.interTextTheme(
+          const TextTheme(
+            bodyLarge: TextStyle(fontSize: 20), // Increased from 18
+            bodyMedium: TextStyle(fontSize: 18), // Increased from 16
+            bodySmall: TextStyle(fontSize: 16), // Increased from 14
+            titleLarge: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+            ), // Increased from 24
+            titleMedium: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.w600,
+            ), // Increased from 20
+            titleSmall: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ), // Increased from 18
+          ),
+        ),
       ),
       routerConfig: appRouter.config(),
     );
