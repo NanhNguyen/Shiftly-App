@@ -1,6 +1,6 @@
-# Shiftly - Ứng Dụng Quản Lý Lịch Trình
+# ShiftSync - Ứng Dụng Quản Lý Lịch Trình
 
-Shiftly là một ứng dụng quản lý lịch trình toàn diện dành cho thực tập sinh và quản lý. Ứng dụng cho phép đăng ký ca làm việc và yêu cầu nghỉ phép một cách dễ dàng, cùng với quy trình phê duyệt tinh gọn cho quản lý.
+ShiftSync là một ứng dụng quản lý lịch trình toàn diện dành cho thực tập sinh và quản lý. Ứng dụng cho phép đăng ký ca làm việc và yêu cầu nghỉ phép một cách dễ dàng, cùng với quy trình phê duyệt tinh gọn cho quản lý.
 
 ## Cấu Trúc Dự Án
 
@@ -35,4 +35,4 @@ Shiftly là một ứng dụng quản lý lịch trình toàn diện dành cho t
 - **Thông báo**: Thông báo thời gian thực về cập nhật trạng thái lịch trình và các yêu cầu mới.
 
 ## Tái cấu trúc thương hiệu
-Ứng dụng gần đây đã được đổi tên từ "Schedule Pro" thành **Shiftly**.
+Ứng dụng gần đây đã được đổi tên từ "Shiftly" thành **ShiftSync**.

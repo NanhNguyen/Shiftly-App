@@ -1,5 +1,5 @@
 {
-    "name": "shiftly-app-deploy",
+    "name": "shiftsync-app-deploy",
     "version": "1.0.0",
     "private": true,
     "scripts": {
