@@ -15,16 +15,13 @@ class LoginCubit extends BaseCubit<LoginState> {
 
   Future<void> login(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
-      setError('Please enter both email and password');
+      setError('Vui lòng nhập đầy đủ email và mật khẩu');
       return;
     }
 
-    setLoading();
-    try {
+    safeCall(() async {
       await _authService.login(email, password);
       setSuccess();
-    } catch (e) {
-      setError(e.toString());
-    }
+    });
   }
 }

@@ -17,8 +17,7 @@ class HomeCubit extends BaseCubit<HomeState> {
     : super(HomeState(user: _authService.currentUser));
 
   Future<void> loadData() async {
-    setLoading();
-    try {
+    safeCall(() async {
       final currentUser = _authService.currentUser;
       final isManagerOrHR =
           currentUser?.role == UserRole.MANAGER ||
@@ -73,8 +72,6 @@ class HomeCubit extends BaseCubit<HomeState> {
           todaySchedule: todaySchedule,
         ),
       );
-    } catch (e) {
-      setError(e.toString());
-    }
+    });
   }
 }
