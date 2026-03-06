@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import '../../foundation/storage/token_storage.dart';
@@ -10,9 +10,10 @@ class ApiClient {
   late final Dio dio;
 
   static String get baseUrl {
-    if (Platform.isAndroid) {
-      return 'http://10.0.2.2:3000';
+    if (kIsWeb) {
+      return 'https://shiftly-app-backend.onrender.com/';
     }
+    // For local development on Android emulator
     return 'https://shiftly-app-backend.onrender.com/';
   }
 

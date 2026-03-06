@@ -16,7 +16,7 @@ class ProfileCubit extends BaseCubit<ProfileState> {
     : super(ProfileState(user: _authService.currentUser));
 
   Future<void> logout() async {
-    safeCall(() async {
+    await safeCall(() async {
       await _authService.logout();
 
       // Reset singleton cubits to clear state for the next user
@@ -38,7 +38,7 @@ class ProfileCubit extends BaseCubit<ProfileState> {
     required String oldPassword,
     required String newPassword,
   }) async {
-    safeCall(() async {
+    await safeCall(() async {
       await _authService.changePassword(
         oldPassword: oldPassword,
         newPassword: newPassword,
@@ -61,7 +61,7 @@ class ProfileCubit extends BaseCubit<ProfileState> {
   }
 
   Future<void> updateProfile({required String name}) async {
-    safeCall(() async {
+    await safeCall(() async {
       await _authService.updateProfile(name: name);
       emit(
         state.copyWith(
@@ -73,7 +73,7 @@ class ProfileCubit extends BaseCubit<ProfileState> {
   }
 
   Future<void> uploadAvatar(String filePath) async {
-    safeCall(() async {
+    await safeCall(() async {
       await _authService.uploadAvatar(filePath);
       emit(
         state.copyWith(

@@ -70,10 +70,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i514.ApiClient(gh<_i220.TokenStorage>()),
     );
     gh.lazySingleton<_i161.AuthApi>(() => _i161.AuthApi(gh<_i514.ApiClient>()));
+    gh.lazySingleton<_i152.UserApi>(() => _i152.UserApi(gh<_i514.ApiClient>()));
     gh.lazySingleton<_i450.NotificationApi>(
       () => _i450.NotificationApi(gh<_i514.ApiClient>()),
     );
-    gh.lazySingleton<_i152.UserApi>(() => _i152.UserApi(gh<_i514.ApiClient>()));
     gh.lazySingleton<_i611.ScheduleRequestRepo>(
       () => _i168.ScheduleRepoImpl(gh<_i514.ApiClient>()),
     );
