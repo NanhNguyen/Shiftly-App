@@ -20,13 +20,22 @@ class HomePage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text(AppStrings.scheduleOverview),
+            backgroundColor: Colors.blue.shade700,
+            title: const Text(
+              AppStrings.scheduleOverview,
+              style: TextStyle(color: Colors.white),
+            ),
+            iconTheme: const IconThemeData(color: Colors.white),
             actions: [
               Stack(
                 clipBehavior: Clip.none,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.notifications_none, size: 32),
+                    icon: const Icon(
+                      Icons.notifications_none,
+                      size: 32,
+                      color: Colors.white,
+                    ),
                     onPressed: () =>
                         context.pushRoute(const NotificationRoute()),
                   ),

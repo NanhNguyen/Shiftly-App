@@ -53,9 +53,11 @@ class ScheduleFormPage extends StatelessWidget {
             appBar: AppBar(
               title: Text(
                 isRecurring ? AppStrings.recurringLeave : AppStrings.adhocLeave,
+                style: const TextStyle(color: Colors.white),
               ),
               backgroundColor: color,
               foregroundColor: Colors.white,
+              iconTheme: const IconThemeData(color: Colors.white),
             ),
             body: Container(
               height: double.infinity,
@@ -71,150 +73,161 @@ class ScheduleFormPage extends StatelessWidget {
                   horizontal: 24,
                   vertical: 16,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    const SizedBox.shrink(),
-                    const SizedBox(height: 32),
-                    _buildSectionTitle(
-                      isRecurring
-                          ? AppStrings.recurringDuration
-                          : AppStrings.chooseDays,
-                    ),
-                    if (isRecurring)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildDateCard(
-                              context,
-                              label: AppStrings.start,
-                              date: state.startDate ?? DateTime.now(),
-                              color: color,
-                              onTap: () => _showScrollingDatePicker(
-                                context,
-                                initialDate: state.startDate ?? DateTime.now(),
-                                onChanged: (date) => context
-                                    .read<ScheduleFormCubit>()
-                                    .updateField(startDate: date),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
+                        const SizedBox.shrink(),
+                        const SizedBox(height: 32),
+                        _buildSectionTitle(
+                          isRecurring
+                              ? AppStrings.recurringDuration
+                              : AppStrings.chooseDays,
+                        ),
+                        if (isRecurring)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildDateCard(
+                                  context,
+                                  label: AppStrings.start,
+                                  date: state.startDate ?? DateTime.now(),
+                                  color: color,
+                                  onTap: () => _showScrollingDatePicker(
+                                    context,
+                                    initialDate:
+                                        state.startDate ?? DateTime.now(),
+                                    onChanged: (date) => context
+                                        .read<ScheduleFormCubit>()
+                                        .updateField(startDate: date),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          const Icon(
-                            Icons.arrow_forward,
-                            color: Colors.grey,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildDateCard(
-                              context,
-                              label: AppStrings.until,
-                              date: state.endDate ?? DateTime.now(),
-                              color: color,
-                              onTap: () => _showScrollingDatePicker(
-                                context,
-                                initialDate: state.endDate ?? DateTime.now(),
-                                minimumDate: state.startDate,
-                                onChanged: (date) => context
-                                    .read<ScheduleFormCubit>()
-                                    .updateField(endDate: date),
+                              const SizedBox(width: 12),
+                              const Icon(
+                                Icons.arrow_forward,
+                                color: Colors.grey,
+                                size: 16,
                               ),
-                            ),
-                          ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildDateCard(
+                                  context,
+                                  label: AppStrings.until,
+                                  date: state.endDate ?? DateTime.now(),
+                                  color: color,
+                                  onTap: () => _showScrollingDatePicker(
+                                    context,
+                                    initialDate:
+                                        state.endDate ?? DateTime.now(),
+                                    minimumDate: state.startDate,
+                                    onChanged: (date) => context
+                                        .read<ScheduleFormCubit>()
+                                        .updateField(endDate: date),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        else
+                          _buildMultiDatePicker(context, state, color),
+                        const SizedBox(height: 32),
+                        if (isRecurring) ...[
+                          _buildSectionTitle(AppStrings.repeatOn),
+                          _buildWeekdaySelector(context, state, color),
+                          const SizedBox(height: 32),
                         ],
-                      )
-                    else
-                      _buildMultiDatePicker(context, state, color),
-                    const SizedBox(height: 32),
-                    if (isRecurring) ...[
-                      _buildSectionTitle(AppStrings.repeatOn),
-                      _buildWeekdaySelector(context, state, color),
-                      const SizedBox(height: 32),
-                    ],
-                    _buildSectionTitle(AppStrings.shift),
-                    _buildGlassDropdown(
-                      label: AppStrings.workingShift,
-                      value: state.shift,
-                      items: [
-                        AppStrings.morning,
-                        AppStrings.afternoon,
-                        AppStrings.allDay,
-                      ],
-                      onChanged: (v) => context
-                          .read<ScheduleFormCubit>()
-                          .updateField(shift: v),
-                    ),
-                    const SizedBox(height: 32),
-                    _buildSectionTitle(AppStrings.descriptionLabel),
-                    TextField(
-                      onChanged: (v) => context
-                          .read<ScheduleFormCubit>()
-                          .updateField(description: v),
-                      maxLines: 2,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        hintText: AppStrings.addNotes,
-                        prefixIcon: const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Icon(Icons.notes_rounded),
+                        _buildSectionTitle(AppStrings.shift),
+                        _buildGlassDropdown(
+                          label: AppStrings.workingShift,
+                          value: state.shift,
+                          items: [
+                            AppStrings.morning,
+                            AppStrings.afternoon,
+                            AppStrings.allDay,
+                          ],
+                          onChanged: (v) => context
+                              .read<ScheduleFormCubit>()
+                              .updateField(shift: v),
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 20,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey.shade200),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton(
-                        onPressed: state.status == BaseStatus.loading
-                            ? null
-                            : () => context.read<ScheduleFormCubit>().submit(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: color,
-                          foregroundColor: Colors.white,
-                          elevation: 4,
-                          shadowColor: color.withOpacity(0.4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                        const SizedBox(height: 32),
+                        _buildSectionTitle(AppStrings.descriptionLabel),
+                        TextField(
+                          onChanged: (v) => context
+                              .read<ScheduleFormCubit>()
+                              .updateField(description: v),
+                          maxLines: 2,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: AppStrings.addNotes,
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(bottom: 8.0),
+                              child: Icon(Icons.notes_rounded),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 20,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade200,
+                              ),
+                            ),
                           ),
                         ),
-                        child: state.status == BaseStatus.loading
-                            ? const SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Text(
-                                isRecurring
-                                    ? AppStrings.submitLeave
-                                    : AppStrings.confirmRegistration,
-                                style: const TextStyle(
-                                  fontSize: 20, // Increased from 18
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        const SizedBox(height: 48),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            onPressed: state.status == BaseStatus.loading
+                                ? null
+                                : () => context
+                                      .read<ScheduleFormCubit>()
+                                      .submit(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: color,
+                              foregroundColor: Colors.white,
+                              elevation: 4,
+                              shadowColor: color.withOpacity(0.4),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
                               ),
-                      ),
+                            ),
+                            child: state.status == BaseStatus.loading
+                                ? const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    isRecurring
+                                        ? AppStrings.submitLeave
+                                        : AppStrings.confirmRegistration,
+                                    style: const TextStyle(
+                                      fontSize: 20, // Increased from 18
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                      ],
                     ),
-                    const SizedBox(height: 32),
-                  ],
+                  ),
                 ),
               ),
             ),
