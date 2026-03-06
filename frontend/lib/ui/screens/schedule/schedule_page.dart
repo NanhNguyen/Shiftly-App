@@ -52,27 +52,6 @@ class _SchedulePageState extends State<SchedulePage> {
                 : AppStrings.myWorkSchedule,
           ),
           elevation: 0,
-          actions: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.today_rounded),
-                tooltip: 'Hôm nay',
-                onPressed: () {
-                  setState(() {
-                    _focusedDay = DateTime.now();
-                    _selectedDay = DateTime.now();
-                  });
-                },
-              ),
-            ),
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () =>
-                    context.read<ScheduleCubit>().loadSchedules(_userRole),
-              ),
-            ),
-          ],
         ),
         body: DefaultTabController(
           length: 2,
@@ -177,115 +156,121 @@ class _SchedulePageState extends State<SchedulePage> {
                 bottomRight: Radius.circular(16),
               ),
             ),
-            child: TableCalendar(
-              firstDay: DateTime(2020),
-              lastDay: DateTime(2030),
-              focusedDay: _focusedDay,
-              calendarFormat: format,
-              availableCalendarFormats: const {
-                CalendarFormat.month: 'Month',
-                CalendarFormat.week: 'Week',
-              },
-              locale: 'vi',
-              rowHeight: format == CalendarFormat.week ? 180 : 80,
-              headerStyle: const HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-                titleTextStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
-              ),
-              daysOfWeekHeight: 45,
-              daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                ),
-                weekendStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.redAccent,
-                ),
-              ),
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              },
-              onPageChanged: (focusedDay) {
-                setState(() => _focusedDay = focusedDay);
-              },
-              eventLoader: (day) => _getSchedulesForDay(
-                filteredSchedules,
-                day,
-              ).where((s) => s.isRecurring == isRecurringTab).toList(),
-              calendarBuilders: CalendarBuilders(
-                dowBuilder: (context, day) {
-                  final text = DateFormat.E('vi').format(day);
-                  return Center(
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        color: day.weekday == DateTime.sunday
-                            ? Colors.redAccent
-                            : Colors.grey.shade700,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
+            child: Column(
+              children: [
+                _buildCustomCalendarHeader(format),
+                TableCalendar(
+                  headerVisible: false,
+                  firstDay: DateTime(2020),
+                  lastDay: DateTime(2030),
+                  focusedDay: _focusedDay,
+                  calendarFormat: format,
+                  availableCalendarFormats: const {
+                    CalendarFormat.month: 'Month',
+                    CalendarFormat.week: 'Week',
+                  },
+                  locale: 'vi',
+                  rowHeight: format == CalendarFormat.week ? 180 : 80,
+                  headerStyle: const HeaderStyle(
+                    formatButtonVisible: false,
+                    titleCentered: true,
+                    titleTextStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
                     ),
-                  );
-                },
-                defaultBuilder: format == CalendarFormat.week
-                    ? (context, day, focusedDay) => _buildWeekDayCell(
-                        day,
-                        filteredSchedules
-                            .where((s) => s.isRecurring == isRecurringTab)
-                            .toList(),
-                        isSelected: false,
-                        isToday: false,
-                        isManagerOrHR: isManagerOrHR,
-                      )
-                    : null,
-                todayBuilder: format == CalendarFormat.week
-                    ? (context, day, focusedDay) => _buildWeekDayCell(
-                        day,
-                        filteredSchedules
-                            .where((s) => s.isRecurring == isRecurringTab)
-                            .toList(),
-                        isSelected: false,
-                        isToday: true,
-                        isManagerOrHR: isManagerOrHR,
-                      )
-                    : null,
-                selectedBuilder: format == CalendarFormat.week
-                    ? (context, day, focusedDay) => _buildWeekDayCell(
-                        day,
-                        filteredSchedules
-                            .where((s) => s.isRecurring == isRecurringTab)
-                            .toList(),
-                        isSelected: true,
-                        isToday: false,
-                        isManagerOrHR: isManagerOrHR,
-                      )
-                    : null,
-                markerBuilder: (context, date, events) {
-                  if (format == CalendarFormat.week) {
-                    return const SizedBox();
-                  }
-                  if (events.isEmpty) return const SizedBox();
-                  final items = events
-                      .cast<ScheduleRequestModel>()
-                      .where((s) => s.isRecurring == isRecurringTab)
-                      .toList();
-                  if (items.isEmpty) return const SizedBox();
-                  return _buildMonthMarkerDots(items, isManagerOrHR);
-                },
-              ),
+                  ),
+                  daysOfWeekHeight: 45,
+                  daysOfWeekStyle: DaysOfWeekStyle(
+                    weekdayStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey.shade700,
+                    ),
+                    weekendStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
+                  },
+                  onPageChanged: (focusedDay) {
+                    setState(() => _focusedDay = focusedDay);
+                  },
+                  eventLoader: (day) => _getSchedulesForDay(
+                    filteredSchedules,
+                    day,
+                  ).where((s) => s.isRecurring == isRecurringTab).toList(),
+                  calendarBuilders: CalendarBuilders(
+                    dowBuilder: (context, day) {
+                      final text = DateFormat.E('vi').format(day);
+                      return Center(
+                        child: Text(
+                          text,
+                          style: TextStyle(
+                            color: day.weekday == DateTime.sunday
+                                ? Colors.redAccent
+                                : Colors.grey.shade700,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      );
+                    },
+                    defaultBuilder: format == CalendarFormat.week
+                        ? (context, day, focusedDay) => _buildWeekDayCell(
+                            day,
+                            filteredSchedules
+                                .where((s) => s.isRecurring == isRecurringTab)
+                                .toList(),
+                            isSelected: false,
+                            isToday: false,
+                            isManagerOrHR: isManagerOrHR,
+                          )
+                        : null,
+                    todayBuilder: format == CalendarFormat.week
+                        ? (context, day, focusedDay) => _buildWeekDayCell(
+                            day,
+                            filteredSchedules
+                                .where((s) => s.isRecurring == isRecurringTab)
+                                .toList(),
+                            isSelected: false,
+                            isToday: true,
+                            isManagerOrHR: isManagerOrHR,
+                          )
+                        : null,
+                    selectedBuilder: format == CalendarFormat.week
+                        ? (context, day, focusedDay) => _buildWeekDayCell(
+                            day,
+                            filteredSchedules
+                                .where((s) => s.isRecurring == isRecurringTab)
+                                .toList(),
+                            isSelected: true,
+                            isToday: false,
+                            isManagerOrHR: isManagerOrHR,
+                          )
+                        : null,
+                    markerBuilder: (context, date, events) {
+                      if (format == CalendarFormat.week) {
+                        return const SizedBox();
+                      }
+                      if (events.isEmpty) return const SizedBox();
+                      final items = events
+                          .cast<ScheduleRequestModel>()
+                          .where((s) => s.isRecurring == isRecurringTab)
+                          .toList();
+                      if (items.isEmpty) return const SizedBox();
+                      return _buildMonthMarkerDots(items, isManagerOrHR);
+                    },
+                  ),
+                ),
+              ],
             ),
           );
 
@@ -355,6 +340,112 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildCustomCalendarHeader(CalendarFormat format) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            DateFormat.yMMMM('vi').format(_focusedDay).toUpperCase(),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueAccent,
+            ),
+          ),
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _focusedDay = DateTime.now();
+                    _selectedDay = DateTime.now();
+                  });
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'Today',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    if (format == CalendarFormat.week) {
+                      _focusedDay = _focusedDay.subtract(
+                        const Duration(days: 7),
+                      );
+                    } else {
+                      _focusedDay = DateTime(
+                        _focusedDay.year,
+                        _focusedDay.month - 1,
+                        _focusedDay.day,
+                      );
+                    }
+                  });
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE0E0E0), // Colors.grey.shade300
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.chevron_left,
+                    size: 20,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    if (format == CalendarFormat.week) {
+                      _focusedDay = _focusedDay.add(const Duration(days: 7));
+                    } else {
+                      _focusedDay = DateTime(
+                        _focusedDay.year,
+                        _focusedDay.month + 1,
+                        _focusedDay.day,
+                      );
+                    }
+                  });
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE0E0E0), // Colors.grey.shade300
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.chevron_right,
+                    size: 20,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -784,7 +875,7 @@ class _SchedulePageState extends State<SchedulePage> {
       itemBuilder: (context, index) {
         final req = filteredEvents[index];
         final isLeave = req.type == ScheduleType.LEAVE;
-        final color = Colors.blue; // Consistent blue
+        final shiftColor = _getColorForShift(req.shift) ?? Colors.blue;
         final statusColor = req.status == RequestStatus.APPROVED
             ? Colors.green
             : (req.status == RequestStatus.PENDING
@@ -795,7 +886,7 @@ class _SchedulePageState extends State<SchedulePage> {
           margin: const EdgeInsets.only(bottom: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: color.withOpacity(0.2)),
+            side: BorderSide(color: shiftColor.withOpacity(0.2)),
           ),
           child: ListTile(
             contentPadding: const EdgeInsets.symmetric(
@@ -807,14 +898,14 @@ class _SchedulePageState extends State<SchedulePage> {
               children: [
                 Icon(
                   isLeave ? Icons.beach_access : Icons.work_outline,
-                  color: color,
+                  color: shiftColor,
                 ),
                 Text(
                   req.shift,
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: color,
+                    color: shiftColor,
                   ),
                 ),
               ],
@@ -829,40 +920,50 @@ class _SchedulePageState extends State<SchedulePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (req.description != null && req.description!.isNotEmpty)
-                  Text(
-                    req.description!,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, bottom: 4),
+                    child: Text(
+                      req.description!,
+                      style: TextStyle(
+                        fontSize: isManagerOrHR ? 16 : 14,
+                        fontWeight: isManagerOrHR
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.circle, size: 8, color: statusColor),
-                    const SizedBox(width: 4),
-                    Text(
-                      req.status.displayName,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: statusColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    if (req.isRecurring && req.weekday != null) ...[
-                      const SizedBox(width: 8),
-                      Icon(Icons.repeat, size: 12, color: Colors.grey.shade600),
-                      const SizedBox(width: 2),
+                if (!isManagerOrHR)
+                  Row(
+                    children: [
+                      Icon(Icons.circle, size: 8, color: statusColor),
+                      const SizedBox(width: 4),
                       Text(
-                        _weekdayDisplayName(req.weekday!),
+                        req.status.displayName,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey.shade600,
+                          color: statusColor,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
+                      if (req.isRecurring && req.weekday != null) ...[
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.repeat,
+                          size: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          _weekdayDisplayName(req.weekday!),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
-                ),
+                  ),
               ],
             ),
             trailing: isManagerOrHR
@@ -877,6 +978,18 @@ class _SchedulePageState extends State<SchedulePage> {
         );
       },
     );
+  }
+
+  Color? _getColorForShift(String shift) {
+    if (shift == AppStrings.morning || shift.toUpperCase() == 'SÁNG') {
+      return Colors.cyan.shade800;
+    } else if (shift == AppStrings.afternoon ||
+        shift.toUpperCase() == 'CHIỀU') {
+      return Colors.deepOrange.shade700;
+    } else if (shift == AppStrings.allDay || shift.toUpperCase() == 'CẢ NGÀY') {
+      return Colors.blue.shade900;
+    }
+    return null;
   }
 
   void _showRequestDetails(BuildContext context, ScheduleRequestModel req) {
