@@ -12,8 +12,15 @@ import '../main/cubit/main_cubit.dart';
 import '../../../resource/app_strings.dart';
 
 @RoutePage()
-class ManagerRequestPage extends StatelessWidget {
+class ManagerRequestPage extends StatefulWidget {
   const ManagerRequestPage({super.key});
+
+  @override
+  State<ManagerRequestPage> createState() => _ManagerRequestPageState();
+}
+
+class _ManagerRequestPageState extends State<ManagerRequestPage> {
+  String _sortOrder = 'desc'; // 'desc' for newer first, 'asc' for older first
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,7 @@ class ManagerRequestPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<ManagerRequestsCubit>()..loadAllRequests(),
       child: DefaultTabController(
-        length: isManager ? 1 : 3,
+        length: isManager ? 2 : 3,
         child: Scaffold(
           appBar: AppBar(
             title: Text(
@@ -33,7 +40,12 @@ class ManagerRequestPage extends StatelessWidget {
                   : AppStrings.allRequestsView,
             ),
             bottom: isManager
-                ? null
+                ? const TabBar(
+                    tabs: [
+                      Tab(text: AppStrings.pending),
+                      Tab(text: AppStrings.approved),
+                    ],
+                  )
                 : TabBar(
                     tabs: [
                       Tab(text: AppStrings.pending.toUpperCase()),
@@ -119,16 +131,31 @@ class ManagerRequestPage extends StatelessWidget {
     final pendingRequests = state.requests
         .where((r) => r.status == RequestStatus.PENDING)
         .toList();
+    final approvedRequests = state.requests
+        .where((r) => r.status == RequestStatus.APPROVED)
+        .toList();
 
-    if (pendingRequests.isEmpty) {
-      return const Center(child: Text(AppStrings.noPendingRequests));
-    }
+    final tabController = DefaultTabController.of(context);
 
-    final displayItems = pendingRequests.groupByGroupId();
-
-    return RefreshIndicator(
-      onRefresh: () => context.read<ManagerRequestsCubit>().loadAllRequests(),
-      child: _buildResponsiveGrid(context, displayItems, showActions: true),
+    return AnimatedBuilder(
+      animation: tabController,
+      builder: (context, _) {
+        return IndexedStack(
+          index: tabController.index,
+          children: [
+            _buildRequestListViewWithSort(
+              context,
+              pendingRequests,
+              showActions: true,
+            ),
+            _buildRequestListViewWithSort(
+              context,
+              approvedRequests,
+              showActions: false,
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -144,16 +171,36 @@ class ManagerRequestPage extends StatelessWidget {
         .where((r) => r.status == RequestStatus.REJECTED)
         .toList();
 
-    return TabBarView(
-      children: [
-        _buildRequestListView(context, pendingRequests, showActions: false),
-        _buildRequestListView(context, approvedRequests, showActions: false),
-        _buildRequestListView(context, rejectedRequests, showActions: false),
-      ],
+    final tabController = DefaultTabController.of(context);
+
+    return AnimatedBuilder(
+      animation: tabController,
+      builder: (context, _) {
+        return IndexedStack(
+          index: tabController.index,
+          children: [
+            _buildRequestListViewWithSort(
+              context,
+              pendingRequests,
+              showActions: false,
+            ),
+            _buildRequestListViewWithSort(
+              context,
+              approvedRequests,
+              showActions: false,
+            ),
+            _buildRequestListViewWithSort(
+              context,
+              rejectedRequests,
+              showActions: false,
+            ),
+          ],
+        );
+      },
     );
   }
 
-  Widget _buildRequestListView(
+  Widget _buildRequestListViewWithSort(
     BuildContext context,
     List<ScheduleRequestModel> requests, {
     required bool showActions,
@@ -174,12 +221,61 @@ class ManagerRequestPage extends StatelessWidget {
 
     final displayItems = requests.groupByGroupId();
 
-    return RefreshIndicator(
-      onRefresh: () => context.read<ManagerRequestsCubit>().loadAllRequests(),
-      child: _buildResponsiveGrid(
-        context,
-        displayItems,
-        showActions: showActions,
+    // Sort displayItems based on _sortOrder
+    displayItems.sort((a, b) {
+      final aDate = (a is List<ScheduleRequestModel>)
+          ? a.first.createdAt
+          : (a as ScheduleRequestModel).createdAt;
+      final bDate = (b is List<ScheduleRequestModel>)
+          ? b.first.createdAt
+          : (b as ScheduleRequestModel).createdAt;
+      return _sortOrder == 'desc'
+          ? bDate.compareTo(aDate)
+          : aDate.compareTo(bDate);
+    });
+
+    return Column(
+      children: [
+        _buildSortDropdown(),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () =>
+                context.read<ManagerRequestsCubit>().loadAllRequests(),
+            child: _buildResponsiveGrid(
+              context,
+              displayItems,
+              showActions: showActions,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSortDropdown() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      alignment: Alignment.centerRight,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: _sortOrder,
+          icon: const Icon(Icons.sort, color: Colors.blue),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
+          onChanged: (String? newValue) {
+            if (newValue != null) {
+              setState(() {
+                _sortOrder = newValue;
+              });
+            }
+          },
+          items: const [
+            DropdownMenuItem(value: 'desc', child: Text('Mới nhất trước')),
+            DropdownMenuItem(value: 'asc', child: Text('Cũ nhất trước')),
+          ],
+        ),
       ),
     );
   }
@@ -373,6 +469,19 @@ class ManagerRequestPage extends StatelessWidget {
                 ),
               ),
             ],
+            const SizedBox(height: 12),
+            Text(
+              'Từ: ${DateFormat('dd/MM/yyyy HH:mm').format(first.createdAt)}',
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+            ),
+            if (first.status == RequestStatus.APPROVED ||
+                first.status == RequestStatus.REJECTED) ...[
+              const SizedBox(height: 4),
+              Text(
+                'Thời gian xử lý: ${DateFormat('dd/MM/yyyy HH:mm').format(first.createdAt)}',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+              ),
+            ],
             if (showActions && first.status == RequestStatus.PENDING) ...[
               const SizedBox(height: 20),
               Row(
@@ -471,6 +580,19 @@ class ManagerRequestPage extends StatelessWidget {
             Text(
               '${AppStrings.datesLabel} ${DateFormat('yyyy-MM-dd').format(req.startDate)}',
             ),
+            const SizedBox(height: 12),
+            Text(
+              'Thời gian tạo: ${DateFormat('dd/MM/yyyy HH:mm').format(req.createdAt)}',
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+            ),
+            if (req.status == RequestStatus.APPROVED ||
+                req.status == RequestStatus.REJECTED) ...[
+              const SizedBox(height: 4),
+              Text(
+                'Thời gian xử lý: ${DateFormat('dd/MM/yyyy HH:mm').format(req.createdAt)}',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+              ),
+            ],
             if (showActions && req.status == RequestStatus.PENDING) ...[
               const SizedBox(height: 16),
               Row(
