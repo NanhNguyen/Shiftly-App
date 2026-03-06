@@ -36,6 +36,7 @@ class ScheduleRequestModel with _$ScheduleRequestModel {
     required RequestStatus status,
     @JsonKey(name: 'created_at', readValue: _readCreatedAt)
     required DateTime createdAt,
+    @JsonKey(name: 'updated_at', readValue: _readUpdatedAt) DateTime? updatedAt,
     required RecurrenceModel recurrence,
     String? approvedBy,
     String? title,
@@ -68,6 +69,8 @@ Object? _readEndDate(Map json, String key) =>
     json['end_date'] ?? json['endDate'] ?? json['date'];
 Object? _readCreatedAt(Map json, String key) =>
     json['created_at'] ?? json['createdAt'];
+Object? _readUpdatedAt(Map json, String key) =>
+    json['updated_at'] ?? json['updatedAt'];
 
 extension ScheduleRequestListExtension on List<ScheduleRequestModel> {
   List<dynamic> groupByGroupId() {

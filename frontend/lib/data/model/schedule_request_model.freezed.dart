@@ -261,6 +261,8 @@ mixin _$ScheduleRequestModel {
   RequestStatus get status => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at', readValue: _readCreatedAt)
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at', readValue: _readUpdatedAt)
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
   RecurrenceModel get recurrence => throw _privateConstructorUsedError;
   String? get approvedBy => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
@@ -297,6 +299,7 @@ abstract class $ScheduleRequestModelCopyWith<$Res> {
     @JsonKey(name: 'end_date', readValue: _readEndDate) DateTime endDate,
     RequestStatus status,
     @JsonKey(name: 'created_at', readValue: _readCreatedAt) DateTime createdAt,
+    @JsonKey(name: 'updated_at', readValue: _readUpdatedAt) DateTime? updatedAt,
     RecurrenceModel recurrence,
     String? approvedBy,
     String? title,
@@ -336,6 +339,7 @@ class _$ScheduleRequestModelCopyWithImpl<
     Object? endDate = null,
     Object? status = null,
     Object? createdAt = null,
+    Object? updatedAt = freezed,
     Object? recurrence = null,
     Object? approvedBy = freezed,
     Object? title = freezed,
@@ -385,6 +389,10 @@ class _$ScheduleRequestModelCopyWithImpl<
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
                       as DateTime,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
             recurrence: null == recurrence
                 ? _value.recurrence
                 : recurrence // ignore: cast_nullable_to_non_nullable
@@ -446,6 +454,7 @@ abstract class _$$ScheduleRequestModelImplCopyWith<$Res>
     @JsonKey(name: 'end_date', readValue: _readEndDate) DateTime endDate,
     RequestStatus status,
     @JsonKey(name: 'created_at', readValue: _readCreatedAt) DateTime createdAt,
+    @JsonKey(name: 'updated_at', readValue: _readUpdatedAt) DateTime? updatedAt,
     RecurrenceModel recurrence,
     String? approvedBy,
     String? title,
@@ -482,6 +491,7 @@ class __$$ScheduleRequestModelImplCopyWithImpl<$Res>
     Object? endDate = null,
     Object? status = null,
     Object? createdAt = null,
+    Object? updatedAt = freezed,
     Object? recurrence = null,
     Object? approvedBy = freezed,
     Object? title = freezed,
@@ -531,6 +541,10 @@ class __$$ScheduleRequestModelImplCopyWithImpl<$Res>
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
                   as DateTime,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
         recurrence: null == recurrence
             ? _value.recurrence
             : recurrence // ignore: cast_nullable_to_non_nullable
@@ -578,6 +592,7 @@ class _$ScheduleRequestModelImpl implements _ScheduleRequestModel {
     required this.status,
     @JsonKey(name: 'created_at', readValue: _readCreatedAt)
     required this.createdAt,
+    @JsonKey(name: 'updated_at', readValue: _readUpdatedAt) this.updatedAt,
     required this.recurrence,
     this.approvedBy,
     this.title,
@@ -625,6 +640,9 @@ class _$ScheduleRequestModelImpl implements _ScheduleRequestModel {
   @JsonKey(name: 'created_at', readValue: _readCreatedAt)
   final DateTime createdAt;
   @override
+  @JsonKey(name: 'updated_at', readValue: _readUpdatedAt)
+  final DateTime? updatedAt;
+  @override
   final RecurrenceModel recurrence;
   @override
   final String? approvedBy;
@@ -640,7 +658,7 @@ class _$ScheduleRequestModelImpl implements _ScheduleRequestModel {
 
   @override
   String toString() {
-    return 'ScheduleRequestModel(id: $id, employeeId: $employeeId, userMetadata: $userMetadata, weekday: $weekday, shift: $shift, isRecurring: $isRecurring, startDate: $startDate, endDate: $endDate, status: $status, createdAt: $createdAt, recurrence: $recurrence, approvedBy: $approvedBy, title: $title, description: $description, type: $type, groupId: $groupId)';
+    return 'ScheduleRequestModel(id: $id, employeeId: $employeeId, userMetadata: $userMetadata, weekday: $weekday, shift: $shift, isRecurring: $isRecurring, startDate: $startDate, endDate: $endDate, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, recurrence: $recurrence, approvedBy: $approvedBy, title: $title, description: $description, type: $type, groupId: $groupId)';
   }
 
   @override
@@ -665,6 +683,8 @@ class _$ScheduleRequestModelImpl implements _ScheduleRequestModel {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.recurrence, recurrence) ||
                 other.recurrence == recurrence) &&
             (identical(other.approvedBy, approvedBy) ||
@@ -690,6 +710,7 @@ class _$ScheduleRequestModelImpl implements _ScheduleRequestModel {
     endDate,
     status,
     createdAt,
+    updatedAt,
     recurrence,
     approvedBy,
     title,
@@ -733,6 +754,8 @@ abstract class _ScheduleRequestModel implements ScheduleRequestModel {
     required final RequestStatus status,
     @JsonKey(name: 'created_at', readValue: _readCreatedAt)
     required final DateTime createdAt,
+    @JsonKey(name: 'updated_at', readValue: _readUpdatedAt)
+    final DateTime? updatedAt,
     required final RecurrenceModel recurrence,
     final String? approvedBy,
     final String? title,
@@ -771,6 +794,9 @@ abstract class _ScheduleRequestModel implements ScheduleRequestModel {
   @override
   @JsonKey(name: 'created_at', readValue: _readCreatedAt)
   DateTime get createdAt;
+  @override
+  @JsonKey(name: 'updated_at', readValue: _readUpdatedAt)
+  DateTime? get updatedAt;
   @override
   RecurrenceModel get recurrence;
   @override

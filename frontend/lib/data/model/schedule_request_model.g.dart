@@ -51,6 +51,9 @@ _$ScheduleRequestModelImpl _$$ScheduleRequestModelImplFromJson(
   endDate: DateTime.parse(_readEndDate(json, 'end_date') as String),
   status: $enumDecode(_$RequestStatusEnumMap, json['status']),
   createdAt: DateTime.parse(_readCreatedAt(json, 'created_at') as String),
+  updatedAt: _readUpdatedAt(json, 'updated_at') == null
+      ? null
+      : DateTime.parse(_readUpdatedAt(json, 'updated_at') as String),
   recurrence: RecurrenceModel.fromJson(
     json['recurrence'] as Map<String, dynamic>,
   ),
@@ -76,6 +79,7 @@ Map<String, dynamic> _$$ScheduleRequestModelImplToJson(
   'end_date': instance.endDate.toIso8601String(),
   'status': _$RequestStatusEnumMap[instance.status]!,
   'created_at': instance.createdAt.toIso8601String(),
+  'updated_at': instance.updatedAt?.toIso8601String(),
   'recurrence': instance.recurrence,
   'approvedBy': instance.approvedBy,
   'title': instance.title,
