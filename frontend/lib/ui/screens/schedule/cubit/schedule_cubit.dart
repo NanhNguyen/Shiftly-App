@@ -11,6 +11,10 @@ class ScheduleCubit extends BaseCubit<ScheduleState> {
 
   ScheduleCubit(this._scheduleRepo) : super(const ScheduleState());
 
+  void resetDate() {
+    emit(state.copyWith(resetTrigger: DateTime.now().millisecondsSinceEpoch));
+  }
+
   Future<void> loadSchedules(UserRole role) async {
     setLoading();
     try {

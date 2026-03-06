@@ -10,5 +10,6 @@ class ScheduleState with _$ScheduleState {
     @Default(BaseStatus.initial) BaseStatus status,
     String? errorMessage,
     @Default([]) List<ScheduleRequestModel> approvedSchedules,
+    int? resetTrigger,
   }) = _ScheduleState;
 }

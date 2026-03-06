@@ -21,6 +21,7 @@ mixin _$ScheduleState {
   String? get errorMessage => throw _privateConstructorUsedError;
   List<ScheduleRequestModel> get approvedSchedules =>
       throw _privateConstructorUsedError;
+  int? get resetTrigger => throw _privateConstructorUsedError;
 
   /// Create a copy of ScheduleState
   /// with the given fields replaced by the non-null parameter values.
@@ -40,6 +41,7 @@ abstract class $ScheduleStateCopyWith<$Res> {
     BaseStatus status,
     String? errorMessage,
     List<ScheduleRequestModel> approvedSchedules,
+    int? resetTrigger,
   });
 }
 
@@ -61,6 +63,7 @@ class _$ScheduleStateCopyWithImpl<$Res, $Val extends ScheduleState>
     Object? status = null,
     Object? errorMessage = freezed,
     Object? approvedSchedules = null,
+    Object? resetTrigger = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -76,6 +79,10 @@ class _$ScheduleStateCopyWithImpl<$Res, $Val extends ScheduleState>
                 ? _value.approvedSchedules
                 : approvedSchedules // ignore: cast_nullable_to_non_nullable
                       as List<ScheduleRequestModel>,
+            resetTrigger: freezed == resetTrigger
+                ? _value.resetTrigger
+                : resetTrigger // ignore: cast_nullable_to_non_nullable
+                      as int?,
           )
           as $Val,
     );
@@ -95,6 +102,7 @@ abstract class _$$ScheduleStateImplCopyWith<$Res>
     BaseStatus status,
     String? errorMessage,
     List<ScheduleRequestModel> approvedSchedules,
+    int? resetTrigger,
   });
 }
 
@@ -115,6 +123,7 @@ class __$$ScheduleStateImplCopyWithImpl<$Res>
     Object? status = null,
     Object? errorMessage = freezed,
     Object? approvedSchedules = null,
+    Object? resetTrigger = freezed,
   }) {
     return _then(
       _$ScheduleStateImpl(
@@ -130,6 +139,10 @@ class __$$ScheduleStateImplCopyWithImpl<$Res>
             ? _value._approvedSchedules
             : approvedSchedules // ignore: cast_nullable_to_non_nullable
                   as List<ScheduleRequestModel>,
+        resetTrigger: freezed == resetTrigger
+            ? _value.resetTrigger
+            : resetTrigger // ignore: cast_nullable_to_non_nullable
+                  as int?,
       ),
     );
   }
@@ -142,6 +155,7 @@ class _$ScheduleStateImpl implements _ScheduleState {
     this.status = BaseStatus.initial,
     this.errorMessage,
     final List<ScheduleRequestModel> approvedSchedules = const [],
+    this.resetTrigger,
   }) : _approvedSchedules = approvedSchedules;
 
   @override
@@ -160,8 +174,11 @@ class _$ScheduleStateImpl implements _ScheduleState {
   }
 
   @override
+  final int? resetTrigger;
+
+  @override
   String toString() {
-    return 'ScheduleState(status: $status, errorMessage: $errorMessage, approvedSchedules: $approvedSchedules)';
+    return 'ScheduleState(status: $status, errorMessage: $errorMessage, approvedSchedules: $approvedSchedules, resetTrigger: $resetTrigger)';
   }
 
   @override
@@ -175,7 +192,9 @@ class _$ScheduleStateImpl implements _ScheduleState {
             const DeepCollectionEquality().equals(
               other._approvedSchedules,
               _approvedSchedules,
-            ));
+            ) &&
+            (identical(other.resetTrigger, resetTrigger) ||
+                other.resetTrigger == resetTrigger));
   }
 
   @override
@@ -184,6 +203,7 @@ class _$ScheduleStateImpl implements _ScheduleState {
     status,
     errorMessage,
     const DeepCollectionEquality().hash(_approvedSchedules),
+    resetTrigger,
   );
 
   /// Create a copy of ScheduleState
@@ -200,6 +220,7 @@ abstract class _ScheduleState implements ScheduleState {
     final BaseStatus status,
     final String? errorMessage,
     final List<ScheduleRequestModel> approvedSchedules,
+    final int? resetTrigger,
   }) = _$ScheduleStateImpl;
 
   @override
@@ -208,6 +229,8 @@ abstract class _ScheduleState implements ScheduleState {
   String? get errorMessage;
   @override
   List<ScheduleRequestModel> get approvedSchedules;
+  @override
+  int? get resetTrigger;
 
   /// Create a copy of ScheduleState
   /// with the given fields replaced by the non-null parameter values.

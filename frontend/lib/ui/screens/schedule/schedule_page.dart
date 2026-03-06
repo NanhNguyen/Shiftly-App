@@ -76,48 +76,69 @@ class _SchedulePageState extends State<SchedulePage> {
         ),
         body: DefaultTabController(
           length: 2,
-          child: Column(
-            children: [
-              // Global search bar — filters both tabs simultaneously
-              if (isManagerOrHR) _buildSearchBar(),
-              Container(
-                color: Colors.blue,
-                child: const TabBar(
-                  indicatorColor: Colors.white,
-                  indicatorWeight: 3,
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 18, // Increased from default
+          child: BlocListener<ScheduleCubit, ScheduleState>(
+            listenWhen: (prev, curr) => curr.resetTrigger != prev.resetTrigger,
+            listener: (context, state) {
+              if (state.resetTrigger != null) {
+                setState(() {
+                  _focusedDay = DateTime.now();
+                  _selectedDay = DateTime.now();
+                });
+              }
+            },
+            child: Column(
+              children: [
+                // Global search bar — filters both tabs simultaneously
+                if (isManagerOrHR) _buildSearchBar(),
+                Container(
+                  color: Colors.blue,
+                  child: const TabBar(
+                    indicatorColor: Colors.white,
+                    indicatorWeight: 3,
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 18, // Increased from default
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white60,
+                      fontSize: 17, // Increased from default
+                    ),
+                    tabs: [
+                      Tab(text: AppStrings.recurringLeave),
+                      Tab(text: AppStrings.adhocLeave),
+                    ],
                   ),
-                  unselectedLabelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white60,
-                    fontSize: 17, // Increased from default
-                  ),
-                  tabs: [
-                    Tab(text: AppStrings.recurringLeave),
-                    Tab(text: AppStrings.adhocLeave),
-                  ],
                 ),
-              ),
-              Expanded(
-                child: BlocBuilder<ScheduleCubit, ScheduleState>(
-                  builder: (context, state) {
-                    if (state.status == BaseStatus.loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+                Expanded(
+                  child: BlocBuilder<ScheduleCubit, ScheduleState>(
+                    builder: (context, state) {
+                      if (state.status == BaseStatus.loading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                    return TabBarView(
-                      children: [
-                        _buildCalendarTab(context, state, isManagerOrHR, true),
-                        _buildCalendarTab(context, state, isManagerOrHR, false),
-                      ],
-                    );
-                  },
+                      return TabBarView(
+                        children: [
+                          _buildCalendarTab(
+                            context,
+                            state,
+                            isManagerOrHR,
+                            true,
+                          ),
+                          _buildCalendarTab(
+                            context,
+                            state,
+                            isManagerOrHR,
+                            false,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

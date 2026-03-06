@@ -156,6 +156,7 @@ class _MainPageState extends State<MainPage> {
                                           getIt<ScheduleCubit>().loadSchedules(
                                             _userRole,
                                           );
+                                          getIt<ScheduleCubit>().resetDate();
                                         }
                                       },
                                     );
@@ -185,6 +186,7 @@ class _MainPageState extends State<MainPage> {
                                 (_userRole == UserRole.MANAGER && index == 2) ||
                                 (_userRole == UserRole.HR && index == 1)) {
                               getIt<ScheduleCubit>().loadSchedules(_userRole);
+                              getIt<ScheduleCubit>().resetDate();
                             }
                           },
                           type: BottomNavigationBarType.fixed,
