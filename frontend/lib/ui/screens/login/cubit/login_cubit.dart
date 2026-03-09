@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import '../../../cubit/base_cubit.dart';
 import '../../../../data/service/auth_service.dart';
+import '../../../../data/constant/enums.dart';
 import 'login_state.dart';
 
 @injectable
@@ -10,7 +11,12 @@ class LoginCubit extends BaseCubit<LoginState> {
   LoginCubit(this._authService) : super(const LoginState());
 
   void togglePasswordVisibility() {
-    emit(state.copyWith(obscurePassword: !state.obscurePassword));
+    emit(
+      state.copyWith(
+        obscurePassword: !state.obscurePassword,
+        status: BaseStatus.initial,
+      ),
+    );
   }
 
   Future<void> login(String email, String password) async {

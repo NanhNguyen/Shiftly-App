@@ -10,10 +10,8 @@ class ApiClient {
   late final Dio dio;
 
   static String get baseUrl {
-    if (kDebugMode) {
-      return 'http://localhost:3000/';
-    }
-    return 'https://shiftly-app-backend.onrender.com/';
+    // return 'https://shiftly-app-backend.onrender.com/';
+    return 'http://localhost:3000/';
   }
 
   ApiClient(this._tokenStorage) {
