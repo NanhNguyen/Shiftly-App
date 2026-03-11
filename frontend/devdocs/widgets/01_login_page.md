@@ -20,7 +20,7 @@ BlocProvider<LoginCubit>
                         └── Padding
                             └── Column
                                 ├── Icon (logo lịch)
-                                ├── Text ("Shiftly")
+                                ├── Text ("ShiftFlow")
                                 ├── TextField (email)
                                 ├── TextField (password)
                                 └── ElevatedButton (đăng nhập)
@@ -60,7 +60,7 @@ BlocProvider<LoginCubit>
 - `color: Colors.blue`
 
 ### `Text` – Tên app
-- `data: AppStrings.appName` → hiện text `"Shiftly"`
+- `data: AppStrings.appName` → hiện text `"ShiftFlow"`
 - `style.fontSize: 28`, `fontWeight: bold`, `color: Colors.blue`
 
 ### `TextField` – Email

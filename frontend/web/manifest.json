@@ -1,11 +1,11 @@
 {
-    "name": "Shiftly",
-    "short_name": "Shiftly",
+    "name": "ShiftFlow",
+    "short_name": "ShiftFlow",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#ffffff",
-    "description": "Shiftly - Ứng dụng quản lý lịch trình nội bộ",
+    "description": "ShiftFlow - Ứng dụng quản lý lịch trình nội bộ",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1,7 +1,7 @@
 # 🎨 UI Widgets – Tài liệu từng màn hình
 
 > Mỗi file trong thư mục này mô tả chi tiết **thư viện**, **widget**, và **các argument**
-> được sử dụng tại từng màn hình trong app **Shiftly**.
+> được sử dụng tại từng màn hình trong app **ShiftFlow**.
 
 ---
 
