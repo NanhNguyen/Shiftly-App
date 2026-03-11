@@ -27,7 +27,12 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.status == BaseStatus.success) {
-            context.router.replace(const MainRoute());
+            FocusScope.of(context).unfocus();
+            Future.delayed(const Duration(milliseconds: 100), () {
+              if (mounted) {
+                context.router.replace(const MainRoute());
+              }
+            });
           } else if (state.status == BaseStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

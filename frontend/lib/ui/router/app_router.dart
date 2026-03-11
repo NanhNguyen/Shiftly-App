@@ -9,10 +9,12 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     AutoRoute(page: LoginRoute.page, path: '/login'),
-    AutoRoute(
+    CustomRoute(
       page: MainRoute.page,
       path: '/main',
       initial: true,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+      durationInMilliseconds: 400,
       guards: [AuthGuard()],
     ),
     AutoRoute(
